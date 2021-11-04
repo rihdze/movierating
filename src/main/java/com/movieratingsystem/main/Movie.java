@@ -11,7 +11,7 @@ public class Movie {
 
 //    @GeneratedValue
 
-    Long id;
+
     @Id
     private String name;
     private String genre;
@@ -25,16 +25,10 @@ public class Movie {
         this.name = name;
         this.genre = genre;
         this.year = year;
+        this.rating = 0;
         this.votes = 0;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return this.name;
@@ -85,21 +79,22 @@ public class Movie {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return Objects.equals(id, movie.id) && Objects.equals(name, movie.name) && Objects.equals(genre, movie.genre) && Objects.equals(year, movie.year);
+        return year == movie.year && rating == movie.rating && votes == movie.votes && Objects.equals(name, movie.name) && Objects.equals(genre, movie.genre);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, genre, year);
+        return Objects.hash(name, genre, year, rating, votes);
     }
 
     @Override
     public String toString() {
         return "Movie{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", genre='" + genre + '\'' +
                 ", year=" + year +
+                ", rating=" + rating +
+                ", votes=" + votes +
                 '}';
     }
 }
