@@ -18,11 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.RandomUtils.nextInt;
-import static org.apache.commons.lang3.RandomUtils.nextLong;
-import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,11 +48,73 @@ class MovieControllerTest {
     @MockBean
     private MovieRatingService service;
 
+    @Test
+    void testFindAllMovies() throws Exception {
 
+        List<Movie> movieList = createMovieList();
+        when(service.findAllMovies()).thenReturn(movieList);
 
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get(URL))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(this.id))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value(this.name))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].genre").value(this.genre))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].year").value(this.year))
+                .andExpect(status().isOk());
+
+    }
+    @Test
+    void testFindAllMoviesEmpty() throws Exception {
+
+        List<Movie> movieList = createMovieList();
+        movieList.clear();
+
+        when(service.findAllMovies()).thenReturn(movieList);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get(URL)
+                        .content(asJsonString(movieList))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
     @Test
-    void testSaveInternStaffing() throws Exception {
+    void testFindMovieById() throws Exception {
+
+        Optional<Movie> movie = Optional.of(createMovie());
+        when(service.findMovieById(anyInt())).thenReturn(movie);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get(URL + "/" + this.id))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(this.id))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(this.name))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.genre").value(this.genre))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.year").value(this.year))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    void testFindMovieByIdInvalid() throws Exception{
+        Optional<Movie> movie = Optional.of(createMovie());
+        movie.get().setId(2);
+
+        when(service.findMovieById(2)).thenReturn(movie);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get(URL + "/1")
+                        .content(asJsonString(movie))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testSaveMovie() throws Exception {
 
         Movie movie = createMovie();
         movie.setId(null);
@@ -71,7 +130,7 @@ class MovieControllerTest {
     }
 
     @Test
-    void testSaveInternStaffingInvalidWithIdNotNull() throws Exception {
+    void testSaveMovieInvalidWithIdNotNull() throws Exception {
 
         Movie movie = createMovie();
 
