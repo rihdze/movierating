@@ -113,7 +113,7 @@ class MovieRatingServiceImplTest {
     void testDeleteMovieByIdInvalid() throws Exception {
         doThrow(new IllegalArgumentException()).when(repository).deleteById(anyInt());
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> service.deleteMovie(anyInt()));
+                () -> service.deleteMovie(5));
 
     }
 

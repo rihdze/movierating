@@ -1,12 +1,12 @@
 package com.movieratingsystem.main.business.service.impl;
 
 import com.movieratingsystem.main.business.mappers.MovieMapStructMapper;
-import com.movieratingsystem.main.business.mappers.MovieMapStructMapperImpl;
 import com.movieratingsystem.main.business.repository.MovieRepository;
 import com.movieratingsystem.main.business.repository.model.MovieDAO;
 import com.movieratingsystem.main.business.service.MovieRatingService;
 import com.movieratingsystem.main.model.Movie;
 import lombok.extern.log4j.Log4j2;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +22,8 @@ public class MovieRatingServiceImpl implements MovieRatingService {
 
     @Autowired
     MovieRepository movieRepository;
-    @Autowired
-    MovieMapStructMapper mapper = new MovieMapStructMapperImpl();
+
+    MovieMapStructMapper mapper = Mappers.getMapper(MovieMapStructMapper.class);
 
     @Override
     public Optional<Movie> findMovieById(int id) {
