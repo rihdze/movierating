@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.RandomUtils.nextInt;
-import static org.apache.commons.lang3.RandomUtils.nextLong;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.doThrow;
@@ -54,7 +53,6 @@ class MovieRatingServiceImplTest {
         movieDAOS = createMovieDAOList(movieDAO);
 
     }
-
     @Test
     void testFindAllMovies() throws Exception {
         when(repository.findAll()).thenReturn(movieDAOS);
@@ -116,6 +114,7 @@ class MovieRatingServiceImplTest {
         doThrow(new IllegalArgumentException()).when(repository).deleteById(anyInt());
         Assertions.assertThrows(IllegalArgumentException.class,
                 () -> service.deleteMovie(anyInt()));
+
     }
 
 

@@ -11,7 +11,7 @@ public interface MovieRatingService {
 
     List<Movie> findAllMovies();
 
-    Movie saveMovie(Movie Movie) throws Exception;
+    Movie saveMovie(Movie movie) throws Exception;
 
     void deleteMovie(int id);
 

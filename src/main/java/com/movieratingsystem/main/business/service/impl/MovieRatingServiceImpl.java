@@ -71,10 +71,8 @@ public class MovieRatingServiceImpl implements MovieRatingService {
     public void voteForMovie(Integer id, Integer rating) {
 
         Movie movie = mapper.movieDaoToMovie(movieRepository.getById(id));
-        double currentRating = movie.getRating();
-        currentRating += rating;
-        System.out.println(currentRating);
-        movie.rateMovie(currentRating);
+
+        movie.rateMovie(rating);
         saveMovie(movie);
 
     }
